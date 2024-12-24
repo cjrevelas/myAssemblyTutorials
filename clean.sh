@@ -1,2 +1,2 @@
 #!/bin/bash
-rm *.o *.x
+rm *.o *.x *.lst
