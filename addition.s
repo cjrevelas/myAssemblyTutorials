@@ -1,6 +1,6 @@
 section .data
-    SYSCALL_EXIT equ 1
-    SYSCALL_WRITE equ 4
+    SYSCALL_EXIT equ 60
+    SYSCALL_WRITE equ 1
     STD_OUT equ 1
 
     msg db "The sum is:", 0xa, 0xd
@@ -28,23 +28,23 @@ main:
     mov [sum], eax ; storing the sum in memory location "sum"
 
     mov eax, SYSCALL_WRITE
-    mov ebx, STD_OUT
-    mov ecx, msg
+    mov edi, STD_OUT
+    mov esi, msg
     mov edx, len
-    int 0x80
+    syscall
 
     mov eax, SYSCALL_WRITE
-    mov ebx, STD_OUT
-    mov ecx, sum
-    mov edx, 1
-    int 0x80
+    mov edi, STD_OUT
+    mov esi, sum
+    mov edx, len
+    syscall
 
     mov eax, SYSCALL_WRITE
-    mov ebx, STD_OUT
-    mov ecx, newLine
+    mov edi, STD_OUT
+    mov esi, newLine
     mov edx, len2
-    int 0x80
+    syscall
 
     mov eax, SYSCALL_EXIT
-    mov ebx, 0
-    int 0x80    
+    mov edi, 0
+    syscall
