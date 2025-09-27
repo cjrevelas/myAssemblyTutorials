@@ -40,6 +40,16 @@ print:
     ret
 
 exit:
+    push rbp
+    mov rbp, rsp
+
+    mov rax, SYSCALL_EXIT
+    mov rdi, 0
+    syscall
+
+    mov rsp, rbp
+    pop rbp
+    ret
 
 main:
     mov rax, '3'
@@ -53,35 +63,16 @@ main:
 
     mov [sum], rax ; storing the sum in memory location "sum"
 
-   ; mov eax, SYSCALL_WRITE
-   ; mov edi, STD_OUT
-   ; mov esi, msg
-   ; mov edx, len
-   ; syscall
-
     mov rdi, msg
     mov rsi, len
     call print
 
-   ; mov eax, SYSCALL_WRITE
-   ; mov edi, STD_OUT
-   ; mov esi, sum
-   ; mov edx, len
-   ; syscall
-
-   mov rdi, sum
-   mov rsi, len
-   call print
-   ; mov eax, SYSCALL_WRITE
-   ; mov edi, STD_OUT
-   ; mov esi, newLine
-   ; mov edx, len2
-   ; syscall
+    mov rdi, sum
+    mov rsi, len
+    call print
 
     mov rdi, newLine
     mov rsi, len2
     call print
 
-    mov rax, SYSCALL_EXIT
-    mov rdi, 0
-    syscall
+    call exit
