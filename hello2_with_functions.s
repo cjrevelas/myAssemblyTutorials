@@ -9,10 +9,24 @@ section .data                  ; data segment
 section .text                  ; code segment
     global main                ; declare "main" entry point for the linker
 
+;
+; The following macro sets up the the stack frame of a function.
+;
+%macro prologue 0
+    push rbp                   ; save rbp on the stack to restore it at the end of the function
+    mov rbp, rsp               ; set rbp to rsp
+%endmacro
+
+;
+; THe following macro restores rbp from the stack and returns to the caller.
+;
+%macro epilogue 0
+    pop rbp
+    ret
+%endmacro
+
 print:
-    ; Create the stack frame of the functin
-    push rbp                    ; save rbp on the stack to restore it at the end of the function
-    mov  rbp, rsp               ; set rbp to rsp
+    prologue
 
     ; WRITE system call
     mov  rax, SYSCALL_WRITE     ; WRITE system call will be performed
@@ -21,23 +35,17 @@ print:
     mov  rdx, len               ; length of the message
     syscall                     ; perform the system call
 
-    ; Restore rbp and return to the caller
-    pop  rbp
-    ret
+    epilogue
 
 exit:
-    ; Create the stack frame of the function
-    push rbp                   ; save rbp on the stack to restore it at the end of the function
-    mov  rbp, rsp              ; set rbp to rsp
+    prologue
 
     ; EXIT system call
     mov  rax, SYSCALL_EXIT     ; EXIT system call will be performed
     mov  rdi, 0                ; error code
     syscall                    ; perform the system call
 
-    ; Restore rbp and return to the caller
-    pop  rbp
-    ret
+    epilogue
 
 main:                          ; entry point
     call print                 ; print message to the console
