@@ -29,6 +29,8 @@ section .text
 pyth_triangle:
     prologue
 
+    sub rsp, 16
+
     mov [rsp+arg1], rdi
     mov [rsp+arg2], rsi
 
