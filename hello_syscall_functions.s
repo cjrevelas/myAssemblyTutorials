@@ -1,3 +1,5 @@
+%include "macros.s"
+
 %define SYSCALL_WRITE 1
 %define SYSCALL_EXIT 60
 %define STD_OUT 1
@@ -9,22 +11,6 @@ section .data                  ; data segment
 section .text                  ; code segment
     global main                ; declare "main" entry point for the linker
 
-;
-; The following macro sets up the the stack frame of a function.
-;
-%macro prologue 0
-    push rbp                   ; save rbp on the stack to restore it at the end of the function
-    mov rbp, rsp               ; set rbp to rsp
-%endmacro
-
-;
-; THe following macro restores rbp from the stack and returns to the caller.
-;
-%macro epilogue 0
-    mov rsp, rbp               ; discard local variables and restore stack pointer
-    pop rbp                    ; restore the old frame pointer
-    ret
-%endmacro
 
 ;
 ; Function that prints a message to the console
@@ -59,3 +45,4 @@ exit:
 main:                          ; entry point
     call print                 ; print message to the console
     call exit                  ; terminate program execution
+
