@@ -21,7 +21,8 @@ section .text                  ; code segment
 ; THe following macro restores rbp from the stack and returns to the caller.
 ;
 %macro epilogue 0
-    pop rbp
+    mov rsp, rbp               ; discard local variables and restore stack pointer
+    pop rbp                    ; restore the old frame pointer
     ret
 %endmacro
 
