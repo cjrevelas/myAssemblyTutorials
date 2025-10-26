@@ -1,3 +1,5 @@
+%include "macros.s"
+
 section .data
         fmt db "max(%ld,%ld) = %ld",0xa,0
 
@@ -11,8 +13,7 @@ b       equ 8               ; local variable 2 (second parameter)
 max     equ 16
 
 print_larger:
-        push rbp            ; normal stack frame 
-        mov rbp, rsp        ; essentially, rbp is equivalent to the AP of VAX-MACRO assembly
+        prologue
     
         sub rsp, 32         ; leave space for a, b, max (multiple of 16 bytes to ensure stack alignment)
     
@@ -32,23 +33,21 @@ skip:
         xor eax, eax
         call printf
     
-        mov rsp, rbp
-        pop rbp
-        ret  
+        epilogue
 
 exit:
-        push rbp
-        mov rbp, rsp
+        prologue
         mov eax, 1
         mov ebx, 0
         int 0x80
+        epilogue
 
 main:
-        push rbp
-        mov rbp, rsp
+        prologue
         mov rdi, 50         ; a = 50, i.e., first argument of print_larger
         mov rsi, 70         ; b = 70, i.e., second argument of print_larger
         call print_larger
         call exit
+        epilogue
     
     
